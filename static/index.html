@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f6f8">
+<title>网络面板 - 实时监测您的网络情况</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1 id="title">🐴 网络面板</h1>
+    <div class="spacer"></div>
+    <a href="/admin.html"><button>后台</button></a>
+  </div>
+
+  <!-- 控制区 -->
+  <div class="card">
+    <div class="row">
+      <label class="lbl" for="src">测速地址：</label>
+      <select id="src"></select>
+      <label class="lbl" for="threads">线程数：</label>
+      <input type="number" id="threads" value="8" min="1" max="64">
+    </div>
+    <div class="row">
+      <label class="switch">
+        <input type="checkbox" id="bg">
+        <span class="track"></span>
+        <span>保持后台运行</span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="auto">
+        <span class="track"></span>
+        <span>自动运行</span>
+      </label>
+      <div class="spacer" style="flex:1"></div>
+      <button class="primary" id="startBtn">开始测速</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">总流量</div><div class="v" id="vTotal">-</div></div>
+      <div class="stat"><div class="k">当前速度</div><div class="v" id="vCur">-</div></div>
+      <div class="stat"><div class="k">平均速度</div><div class="v" id="vAvg">-</div></div>
+      <div class="stat"><div class="k">带宽</div><div class="v" id="vBw">-</div></div>
+    </div>
+
+    <div class="chart-box"><canvas id="chart"></canvas></div>
+    <div class="hint" id="hint">选择测速地址后点击「开始测速」。数据经本机代理转发，已解决跨域限制。</div>
+  </div>
+
+  <!-- 用量预测 -->
+  <div class="card">
+    <div class="forecast">
+      <div class="fc"><div class="k">每分钟</div><div class="v" id="fMin">-</div></div>
+      <div class="fc"><div class="k">每小时</div><div class="v" id="fHour">-</div></div>
+      <div class="fc"><div class="k">每天</div><div class="v" id="fDay">-</div></div>
+      <div class="fc"><div class="k">每月</div><div class="v" id="fMon">-</div></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="card">
+    <div class="tabs">
+      <button data-tab="who" class="active">Whoami</button>
+      <button data-tab="src">源码</button>
+      <button data-tab="ip">IP 离线库</button>
+    </div>
+
+    <div class="tab-pane active" id="pane-who">
+      <pre class="kv" id="whoOut">正在加载...</pre>
+    </div>
+
+    <div class="tab-pane" id="pane-src">
+      <pre class="kv" id="srcOut">正在加载...</pre>
+    </div>
+
+    <div class="tab-pane" id="pane-ip">
+      <div class="row">
+        <label class="lbl" for="ipInput">查询 IP：</label>
+        <input type="text" id="ipInput" placeholder="留空则查询你自己的 IP" style="flex:1;min-width:180px">
+        <button id="ipBtn">查询</button>
+      </div>
+      <pre class="kv" id="ipOut">-</pre>
+    </div>
+  </div>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/app.js"></script>
+</body>
+</html>

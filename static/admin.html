@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台管理 - 网络面板</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .login-box { max-width: 380px; margin: 12vh auto; }
+  .row .field { flex: 1; }
+  .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .toolbar .spacer { flex: 1; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 登录 -->
+  <div id="loginView" class="login-box">
+    <div class="card">
+      <h1 style="font-size:18px;margin:0 0 16px">后台登录</h1>
+      <div class="field" style="margin-bottom:12px">
+        <label for="pw">密码</label>
+        <input type="password" id="pw" autocomplete="current-password">
+      </div>
+      <button class="primary" id="loginBtn" style="width:100%">登录</button>
+      <div class="hint" id="loginHint"></div>
+    </div>
+  </div>
+
+  <!-- 管理 -->
+  <div id="adminView" class="hidden">
+    <div class="top">
+      <h1>⚙️ 后台管理</h1>
+      <div class="spacer"></div>
+      <a href="/"><button>返回面板</button></a>
+      <button class="danger" id="logoutBtn">退出</button>
+    </div>
+
+    <!-- 测速链接 -->
+    <div class="card">
+      <div class="toolbar">
+        <strong>测速链接</strong>
+        <span class="hint" style="margin:0" id="srcCount"></span>
+        <div class="spacer"></div>
+        <button class="primary" id="addBtn">+ 新增</button>
+      </div>
+      <table class="src">
+        <thead>
+          <tr>
+            <th>名称</th><th>分类</th><th>地址</th><th>单次上限</th><th>状态</th><th style="width:110px">操作</th>
+          </tr>
+        </thead>
+        <tbody id="srcBody"></tbody>
+      </table>
+      <div class="hint">「单次上限」= 每线程每次请求最多下载多少字节，用来防止测速把流量跑飞。0 表示用默认 32MB。</div>
+    </div>
+
+    <!-- 编辑表单 -->
+    <div class="card hidden" id="editCard">
+      <strong id="editTitle">新增测速链接</strong>
+      <div class="grid2" style="margin-top:14px">
+        <div class="field">
+          <label>名称（面板下拉里显示）</label>
+          <input type="text" id="fName" placeholder="例如 Cloudflare">
+        </div>
+        <div class="field">
+          <label>分类（同名的会归到一组）</label>
+          <input type="text" id="fCat" placeholder="例如 全球 / 国内 / 运营商" list="catList">
+          <datalist id="catList"></datalist>
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>测速地址（必须是 http/https 直链，支持大文件）</label>
+        <input type="text" id="fUrl" placeholder="https://example.com/100mb.test">
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="field">
+          <label>单次上限（字节，0=默认32MB）</label>
+          <input type="number" id="fBytes" value="33554432" min="0" step="1048576">
+        </div>
+        <div class="field">
+          <label>启用</label>
+          <select id="fEnabled"><option value="1">启用</option><option value="0">停用</option></select>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:16px;margin-bottom:0">
+        <button class="primary" id="saveBtn">保存</button>
+        <button id="cancelBtn">取消</button>
+        <button id="testBtn">测试这个地址</button>
+        <span class="hint" id="testOut" style="margin:0"></span>
+      </div>
+    </div>
+
+    <!-- 站点设置 -->
+    <div class="card">
+      <strong>站点设置</strong>
+      <div class="grid2" style="margin-top:14px">
+        <div class="field">
+          <label>站点标题</label>
+          <input type="text" id="sTitle">
+        </div>
+        <div class="field">
+          <label>页脚文字</label>
+          <input type="text" id="sFooter">
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>源码链接（留空则显示内置说明）</label>
+        <input type="text" id="sLink" placeholder="https://github.com/you/netpanel">
+      </div>
+      <div style="margin-top:16px"><button class="primary" id="saveSettings">保存设置</button></div>
+    </div>
+
+    <!-- 改密码 -->
+    <div class="card">
+      <strong>修改密码</strong>
+      <div class="grid2" style="margin-top:14px">
+        <div class="field"><label>原密码</label><input type="password" id="pOld" autocomplete="current-password"></div>
+        <div class="field"><label>新密码（至少 6 位）</label><input type="password" id="pNew" autocomplete="new-password"></div>
+      </div>
+      <div style="margin-top:16px"><button class="primary" id="savePw">修改密码</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/admin.js"></script>
+</body>
+</html>
